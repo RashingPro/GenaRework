@@ -19,7 +19,7 @@ export default class Bot {
             console.log("✅ Bot is ready!");
         });
 
-        this.client.on("interactionCreate", async interaction => {
+        this.client.on("interactionCreate", async (interaction) => {
             await this.client.executeInteraction(interaction);
         });
     }
