@@ -6,10 +6,9 @@ dotenv.config();
 async function main() {
     const bot = new Bot();
 
-    if (!process.env.TOKEN)
-        throw new Error()
+    if (!process.env.TOKEN) throw new Error();
 
-    await bot.start(process.env.TOKEN)
+    await bot.start(process.env.TOKEN);
 }
 
-main()
+void main();
