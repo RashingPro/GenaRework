@@ -9,7 +9,8 @@ export default class Bot {
                 IntentsBitField.Flags.Guilds,
                 IntentsBitField.Flags.GuildMessages,
                 IntentsBitField.Flags.GuildMessageReactions,
-                IntentsBitField.Flags.GuildMembers
+                IntentsBitField.Flags.GuildMembers,
+                IntentsBitField.Flags.MessageContent
             ],
             silent: false
         });
