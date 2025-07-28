@@ -28,6 +28,7 @@ export default class Bot {
 
     async start(token: string) {
         await importx(`${__dirname}/bot/commands/**/*.{js,ts}`);
+        await importx(`${__dirname}/bot/events/**/*.{js,ts}`);
         await this.client.login(token);
     }
 }
