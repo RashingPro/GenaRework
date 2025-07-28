@@ -7,14 +7,19 @@
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "strict": true,
+    "strictNullChecks": true,
     "skipLibCheck": true,
     "declaration": true,
     "outDir": "dist",
     "baseUrl": "./",
     "resolveJsonModule": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     }
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

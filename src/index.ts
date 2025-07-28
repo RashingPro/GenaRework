@@ -1,14 +1,15 @@
-import dotenv from "dotenv";
-import Bot from "@/bot";
+import dotenv from 'dotenv';
+import Bot from '@/bot';
 
 dotenv.config();
 
 async function main() {
     const bot = new Bot();
+    const TOKEN = process.env.TOKEN;
 
-    if (!process.env.TOKEN) throw new Error();
+    if (!TOKEN) throw new Error('No token provided, check your dotenv file!');
 
-    await bot.start(process.env.TOKEN);
+    await bot.start(TOKEN);
 }
 
 void main();
