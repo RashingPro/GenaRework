@@ -5,10 +5,15 @@
   "main": "./dist/index.js",
   "private": true,
   "scripts": {
-    "prettier": "prettier . --write --ignore-path ./dist"
+    "prettier": "prettier . --write --ignore-path ./dist",
+    "build": "tsc && tsc-alias"
   },
   "devDependencies": {
     "prettier": "^3.6.2",
+    "tsc-alias": "^1.8.16",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "discordx": "^11.12.5"
   }
 }
