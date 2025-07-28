@@ -3,5 +3,11 @@
   "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
-  "private": true
+  "private": true,
+  "scripts": {
+    "prettier": "prettier . --write --ignore-path ./dist"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
 }
