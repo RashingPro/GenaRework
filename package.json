@@ -16,6 +16,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "discordx": "^11.12.5"
+    "discordx": "^11.12.5",
+    "@discordx/importer": "^1.3.3"
   }
 }
