@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "prettier": "prettier . --write",
-    "build": "tsup"
+    "build": "tsup",
+    "run": "node ./dist/index.js"
   },
   "devDependencies": {
     "prettier": "^3.6.2",
