@@ -6,10 +6,12 @@
   "private": true,
   "scripts": {
     "prettier": "prettier . --write --ignore-path ./dist",
+    "prebuild": "rimraf dist",
     "build": "tsc && tsc-alias"
   },
   "devDependencies": {
     "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.8.3"
   },
