@@ -5,18 +5,16 @@
   "main": "./dist/index.js",
   "private": true,
   "scripts": {
-    "prettier": "prettier . --write --ignore-path ./dist",
-    "prebuild": "rimraf dist",
-    "build": "tsc && tsc-alias"
+    "prettier": "prettier . --write",
+    "build": "tsup"
   },
   "devDependencies": {
     "prettier": "^3.6.2",
-    "rimraf": "^6.0.1",
-    "tsc-alias": "^1.8.16",
+    "tsup": "^8.5.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "discordx": "^11.12.5",
-    "@discordx/importer": "^1.3.3"
+    "@discordx/importer": "^1.3.3",
+    "discordx": "^11.12.5"
   }
 }
