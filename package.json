@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@discordx/importer": "^1.3.3",
-    "discordx": "^11.12.5"
+    "discordx": "^11.12.5",
+    "dotenv": "^17.2.1"
   }
 }
