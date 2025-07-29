@@ -1,0 +1,152 @@
+import * as fs from "node:fs";
+
+export enum LogLevel {
+    DEBUG,
+    INFO,
+    WARNING,
+    ERROR
+}
+
+export default abstract class Logger {
+    private static init(logFile: string = "./latest.log") {
+        if (!logFile.endsWith(".log")) throw new Error("Invalid log file path");
+        if (fs.existsSync(logFile)) {
+            const stat = fs.statSync(logFile);
+            if (!stat.isFile()) throw new Error("Invalid log file path");
+        }
+        try {
+            fs.appendFileSync(logFile, "");
+            fs.truncateSync(logFile, 0);
+        } catch (err) {
+            console.error(err);
+            throw new Error("Invalid log file path");
+        }
+    }
+
+    private static getLogPrefix(logLevel: LogLevel) {
+        const date = new Date();
+
+        const values: [number, number][] = [
+            [date.getDate(), 2],
+            [date.getMonth() + 1, 2],
+            [date.getFullYear(), 4],
+            [date.getHours(), 2],
+            [date.getMinutes(), 2],
+            [date.getSeconds(), 2],
+            [date.getMilliseconds(), 3]
+        ];
+
+        const formattedValues = values.map(([val, count]) => val.toString().padStart(count, "0"));
+        const [day, month, year, hours, minutes, seconds, milliseconds] = formattedValues;
+
+        let logLevelPrefix;
+        switch (logLevel) {
+            case LogLevel.DEBUG: {
+                logLevelPrefix = "[30m[DEBUG]";
+                break;
+            }
+            case LogLevel.INFO: {
+                logLevelPrefix = "[37m[INFO]";
+                break;
+            }
+            case LogLevel.WARNING: {
+                logLevelPrefix = "[33m[WARN]";
+                break;
+            }
+            case LogLevel.ERROR: {
+                logLevelPrefix = "[31m[ERROR]";
+                break;
+            }
+        }
+
+        return `[33m[${day}.${month}.${year} ${hours}:${minutes}:${seconds} (${milliseconds}ms)] ${logLevelPrefix}[0m`;
+    }
+
+    private static async _log(logLevel: LogLevel, file: string, ...data: any[]) {
+        this.init();
+
+        let text = "";
+        for (const obj of data) {
+            let toBeLogged = "";
+
+            switch (typeof obj) {
+                case "number": {
+                    toBeLogged += "[34m";
+                    break;
+                }
+                case "bigint": {
+                    toBeLogged += "[34m";
+                    break;
+                }
+                case "string": {
+                    toBeLogged += "[32m";
+                    break;
+                }
+            }
+            try {
+                if (typeof obj == "object") {
+                    const json = JSON.stringify(obj);
+                    if (json == "{}" && Object.keys(obj).length > 0) toBeLogged += obj.toString();
+                    else toBeLogged += json;
+                } else toBeLogged += obj.toString();
+            } catch (err) {
+                console.error("Failed to log object:", obj);
+                console.error(err);
+            }
+
+            if (text.length > 1) toBeLogged = " " + toBeLogged;
+            toBeLogged += "[0m";
+            text += toBeLogged;
+        }
+
+        text = `${this.getLogPrefix(logLevel)} ${text}`;
+
+        let logFunc: (data: string) => void = console.log; // fallback value
+        switch (logLevel) {
+            case LogLevel.DEBUG: {
+                logFunc = console.debug;
+                break;
+            }
+            case LogLevel.INFO: {
+                logFunc = console.log;
+                break;
+            }
+            case LogLevel.WARNING: {
+                logFunc = console.warn;
+                break;
+            }
+            case LogLevel.ERROR: {
+                logFunc = console.error;
+                break;
+            }
+        }
+
+        logFunc(text);
+        try {
+            await new Promise(resolve =>
+                fs.appendFile(file, text + "\n", () => {
+                    resolve(null);
+                })
+            );
+        } catch (err) {
+            console.error("Failed to log");
+            console.error(err);
+        }
+    }
+
+    static async debug(...data: any[]) {
+        await this._log(LogLevel.DEBUG, "./latest.log", ...data);
+    }
+
+    static async log(...data: any[]) {
+        await this._log(LogLevel.INFO, "./latest.log", ...data);
+    }
+
+    static async warn(...data: any[]) {
+        await this._log(LogLevel.WARNING, "./latest.log", ...data);
+    }
+
+    static async error(...data: any[]) {
+        await this._log(LogLevel.ERROR, "./latest.log", ...data);
+    }
+}

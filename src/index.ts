@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import Bot from "@/bot";
+import Logger from "@/logger";
 
 dotenv.config();
 
@@ -10,8 +11,11 @@ async function main() {
     }
 
     const bot = new Bot();
-
-    await bot.start(token);
+    try {
+        await bot.start(token);
+    } catch (error) {
+        await Logger.error("Caught runtime error:", error);
+    }
 }
 
 void main();

@@ -1,10 +1,13 @@
 import { ArgsOf, Discord, On } from "discordx";
 import config from "@/../config.json";
+import Logger from "@/logger";
 
 @Discord()
 export abstract class MemberLeave {
     @On({ event: "guildMemberRemove" })
     async onMemberRemove([member]: ArgsOf<"guildMemberRemove">) {
+        await Logger.log(`Member ${member.displayName} (${member.id}) left`);
+
         const channel = member.guild.systemChannel;
         if (!channel || !channel.isSendable()) return;
 
