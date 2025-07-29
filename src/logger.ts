@@ -1,4 +1,6 @@
 import * as fs from "node:fs";
+import * as util from "node:util";
+import { singleton } from "tsyringe";
 
 export enum LogLevel {
     DEBUG,
@@ -7,8 +9,9 @@ export enum LogLevel {
     ERROR
 }
 
-export default abstract class Logger {
-    private static init(logFile: string = "./latest.log") {
+@singleton()
+export default class Logger {
+    constructor(logFile: string = "./latest.log") {
         if (!logFile.endsWith(".log")) throw new Error("Invalid log file path");
         if (fs.existsSync(logFile)) {
             const stat = fs.statSync(logFile);
@@ -23,7 +26,7 @@ export default abstract class Logger {
         }
     }
 
-    private static getLogPrefix(logLevel: LogLevel) {
+    private getLogPrefix(logLevel: LogLevel) {
         const date = new Date();
 
         const values: [number, number][] = [
@@ -62,41 +65,14 @@ export default abstract class Logger {
         return `[33m[${day}.${month}.${year} ${hours}:${minutes}:${seconds} (${milliseconds}ms)] ${logLevelPrefix}[0m`;
     }
 
-    private static async _log(logLevel: LogLevel, file: string, ...data: unknown[]) {
-        this.init();
+    private objectToString(obj: unknown) {
+        return typeof obj === "string" ? obj : util.inspect(obj, { depth: null, colors: true });
+    }
 
+    private async _log(logLevel: LogLevel, file: string, ...data: unknown[]) {
         let text = "";
         for (const obj of data) {
-            let toBeLogged = "";
-
-            switch (typeof obj) {
-                case "number": {
-                    toBeLogged += "[34m";
-                    break;
-                }
-                case "bigint": {
-                    toBeLogged += "[34m";
-                    break;
-                }
-                case "string": {
-                    toBeLogged += "[32m";
-                    break;
-                }
-            }
-            try {
-                if (obj === null) toBeLogged += "[31mnull";
-                else if (obj === undefined) toBeLogged += "[31mundefined";
-                else {
-                    if (typeof obj == "object") {
-                        const json = JSON.stringify(obj);
-                        if (json == "{}" && Object.keys(obj).length > 0) toBeLogged += obj.toString();
-                        else toBeLogged += json;
-                    } else toBeLogged += obj.toString();
-                }
-            } catch (err) {
-                console.error("Failed to log object:", obj);
-                console.error(err);
-            }
+            let toBeLogged = this.objectToString(obj);
 
             if (text.length > 1) toBeLogged = " " + toBeLogged;
             toBeLogged += "[0m";
@@ -138,19 +114,19 @@ export default abstract class Logger {
         }
     }
 
-    static async debug(...data: unknown[]) {
+    async debug(...data: unknown[]) {
         await this._log(LogLevel.DEBUG, "./latest.log", ...data);
     }
 
-    static async log(...data: unknown[]) {
+    async log(...data: unknown[]) {
         await this._log(LogLevel.INFO, "./latest.log", ...data);
     }
 
-    static async warn(...data: unknown[]) {
+    async warn(...data: unknown[]) {
         await this._log(LogLevel.WARNING, "./latest.log", ...data);
     }
 
-    static async error(...data: unknown[]) {
+    async error(...data: unknown[]) {
         await this._log(LogLevel.ERROR, "./latest.log", ...data);
     }
 }

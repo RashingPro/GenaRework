@@ -1,12 +1,16 @@
 import config from "@/../config.json";
 import Logger from "@/logger";
 import { ArgsOf, Discord, On } from "discordx";
+import { inject, injectable } from "tsyringe";
 
 @Discord()
-export abstract class MemberLeave {
+@injectable()
+export class MemberLeave {
+    constructor(@inject(Logger) private readonly logger: Logger) {}
+
     @On({ event: "guildMemberRemove" })
     async onMemberRemove([member]: ArgsOf<"guildMemberRemove">) {
-        await Logger.log(`Member ${member.displayName} (${member.id}) left`);
+        await this.logger.log(`Member ${member.displayName} (${member.id}) left`);
 
         const channel = member.guild.systemChannel;
         if (!channel || !channel.isSendable()) return;

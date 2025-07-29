@@ -1,8 +1,13 @@
+import Logger from "@/logger";
 import config from "config.json";
-import { ArgsOf, Client, Discord, On } from "discordx";
+import { ArgsOf, Discord, On } from "discordx";
+import { inject, injectable } from "tsyringe";
 
 @Discord()
-export abstract class OnReaction {
+@injectable()
+export class OnReaction {
+    constructor(@inject(Logger) private readonly logger: Logger) {}
+
     @On({ event: "messageReactionAdd" })
     async onReactionAdd([reaction]: ArgsOf<"messageReactionAdd">) {
         const configChannels = config.channels.roles as Record<string, Record<string, Record<string, string>>>;

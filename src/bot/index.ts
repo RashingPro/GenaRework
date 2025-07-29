@@ -1,9 +1,10 @@
+import Logger from "@/logger";
 import { importx } from "@discordx/importer";
 import { IntentsBitField, Partials } from "discord.js";
 import { Client } from "discordx";
 
 export default class Bot {
-    constructor() {
+    constructor(public logger: Logger) {
         this.client = new Client({
             intents: [
                 IntentsBitField.Flags.Guilds,

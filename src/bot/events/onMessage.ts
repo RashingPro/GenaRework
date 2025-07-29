@@ -3,9 +3,13 @@ import Logger from "@/logger";
 import type { Message } from "discord.js";
 import { ArgsOf, Client, Discord, On } from "discordx";
 import assert from "node:assert";
+import { inject, injectable } from "tsyringe";
 
 @Discord()
-export abstract class OnMessage {
+@injectable()
+export class OnMessage {
+    constructor(@inject(Logger) private readonly logger: Logger) {}
+
     @On({ event: "messageCreate" })
     async onMessage([message]: ArgsOf<"messageCreate">, client: Client) {
         assert(client.user);
@@ -18,7 +22,7 @@ export abstract class OnMessage {
         if (message.channel.isDMBased()) return;
         if (!message.member) return;
 
-        await Logger.log(
+        await this.logger.log(
             `Member ${message.member.displayName} (${message.author.id}) send message to post channel #${message.channel.name}`
         );
 
@@ -36,7 +40,7 @@ export abstract class OnMessage {
 
         if (flag) {
             await message.delete();
-            await Logger.log(
+            await this.logger.log(
                 `Message from user ${message.member.displayName} (${message.author.id}) in post channel #${message.channel.name} deleted`
             );
             return;
@@ -45,7 +49,7 @@ export abstract class OnMessage {
         await message.react(config.emojis.star);
         await message.react(config.emojis.thumbs_up);
         await message.react(config.emojis.thumbs_down);
-        await Logger.log(
+        await this.logger.log(
             `Reactions putted successfully on ${message.member.displayName}'s (${message.author.id}) message in post channel #${message.channel.name}`
         );
     }

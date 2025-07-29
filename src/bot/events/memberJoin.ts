@@ -1,12 +1,16 @@
 import config from "@/../config.json";
 import Logger from "@/logger";
 import { ArgsOf, Discord, On } from "discordx";
+import { inject, injectable } from "tsyringe";
 
 @Discord()
-export abstract class MemberJoin {
+@injectable()
+export class MemberJoin {
+    constructor(@inject(Logger) private readonly logger: Logger) {}
+
     @On({ event: "guildMemberAdd" })
     async onMemberAdd([member]: ArgsOf<"guildMemberAdd">) {
-        await Logger.log(`Member ${member.displayName} (${member.id}) joined`);
+        await this.logger.log(`Member ${member.displayName} (${member.id}) joined`);
 
         const channel = member.guild.systemChannel;
         if (!channel || !channel.isSendable()) return;

@@ -2,5 +2,5 @@
   "trailingComma": "none",
   "arrowParens": "avoid",
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
-  "importOrderParserPlugins": ["typescript", "decorators"]
+  "importOrderParserPlugins": ["typescript", "decorators-legacy"]
 }
