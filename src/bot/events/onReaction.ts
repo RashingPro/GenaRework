@@ -15,6 +15,9 @@ export class OnReaction {
         if (!roleId) return;
         await reaction.message.fetch();
         if (!reaction.message.member) return;
+        await this.logger.log(
+            `Reaction-role ${roleId} added by ${reaction.message.member.displayName} (${reaction.message.member.id})`
+        );
         await reaction.message.member.roles.add(roleId);
     }
 
@@ -24,6 +27,9 @@ export class OnReaction {
         if (!roleId) return;
         await reaction.message.fetch();
         if (!reaction.message.member) return;
+        await this.logger.log(
+            `Reaction-role ${roleId} removed by ${reaction.message.member.displayName} (${reaction.message.member.id})`
+        );
         await reaction.message.member.roles.remove(roleId);
     }
 
