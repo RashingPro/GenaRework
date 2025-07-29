@@ -1,6 +1,6 @@
 import { Client } from "discordx";
 import { importx } from "@discordx/importer";
-import { IntentsBitField } from "discord.js";
+import { IntentsBitField, Partials } from "discord.js";
 
 export default class Bot {
     constructor() {
@@ -12,6 +12,7 @@ export default class Bot {
                 IntentsBitField.Flags.GuildMembers,
                 IntentsBitField.Flags.MessageContent
             ],
+            partials: [Partials.Message, Partials.Channel, Partials.Reaction, Partials.User, Partials.GuildMember],
             silent: false
         });
 
