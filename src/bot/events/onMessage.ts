@@ -32,10 +32,8 @@ export abstract class OnMessage {
             return;
         }
 
-        const emojiStar = client.emojis.resolveIdentifier("1399695983754874881");
-        assert(emojiStar);
-        await message.react(emojiStar);
-        await message.react("👍");
-        await message.react("👎");
+        await message.react(config.emojis.star);
+        await message.react(config.emojis.thumbs_up);
+        await message.react(config.emojis.thumbs_down);
     }
 }

@@ -4,12 +4,14 @@ import Bot from "@/bot";
 dotenv.config();
 
 async function main() {
+    const token = process.env.TOKEN
+    if (!token) {
+        throw new Error("Token not found. Please check .env file")
+    }
+
     const bot = new Bot();
-    const TOKEN = process.env.TOKEN;
 
-    if (!TOKEN) throw new Error("No token provided, check your dotenv file!");
-
-    await bot.start(TOKEN);
+    await bot.start(token);
 }
 
 void main();
