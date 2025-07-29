@@ -9,7 +9,6 @@ export class Error {
 
     @On({ event: "error" })
     async onError([error]: ArgsOf<"error">) {
-        console.error(error);
         await this.logger.error("Caught runtime error:", error);
     }
 }

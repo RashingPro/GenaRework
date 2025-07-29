@@ -46,11 +46,16 @@ export class OnMessage {
             return;
         }
 
-        await message.react(config.emojis.star);
+        try {
+            await message.react(config.emojis.star);
+        } catch (error) {
+            await this.logger.error("Failed to react with star\n", error);
+        }
+
         await message.react(config.emojis.thumbs_up);
         await message.react(config.emojis.thumbs_down);
         await this.logger.log(
-            `Reactions putted successfully on ${message.member.displayName}'s (${message.author.id}) message in post channel #${message.channel.name}`
+            `Reactions putted on ${message.member.displayName}'s (${message.author.id}) message in post channel #${message.channel.name}`
         );
     }
 }
