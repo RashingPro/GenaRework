@@ -1,6 +1,6 @@
-import { Client } from 'discordx';
-import { importx } from '@discordx/importer';
-import { IntentsBitField } from 'discord.js';
+import { Client } from "discordx";
+import { importx } from "@discordx/importer";
+import { IntentsBitField } from "discord.js";
 
 export default class Bot {
     constructor() {
@@ -15,12 +15,12 @@ export default class Bot {
             silent: false
         });
 
-        this.client.once('ready', async () => {
+        this.client.once("ready", async () => {
             await this.client.initApplicationCommands();
-            console.log('✅ Bot is ready!');
+            console.log("✅ Bot is ready!");
         });
 
-        this.client.on('interactionCreate', async interaction => {
+        this.client.on("interactionCreate", async interaction => {
             await this.client.executeInteraction(interaction);
         });
     }

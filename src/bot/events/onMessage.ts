@@ -1,11 +1,11 @@
-import { ArgsOf, Client, Discord, On } from 'discordx';
-import type { Message } from 'discord.js';
-import config from '@/../config.json';
+import { ArgsOf, Client, Discord, On } from "discordx";
+import type { Message } from "discord.js";
+import config from "@/../config.json";
 
 @Discord()
 export abstract class OnMessage {
-    @On({ event: 'messageCreate' })
-    async onMessage([message]: ArgsOf<'messageCreate'>, client: Client) {
+    @On({ event: "messageCreate" })
+    async onMessage([message]: ArgsOf<"messageCreate">, client: Client) {
         if (!client.user) return;
 
         if (message.author.id == client.user.id) return;
@@ -39,7 +39,7 @@ export abstract class OnMessage {
         } catch (e) {
             console.error(`Cannot react with star emoji! ${e}`);
         }
-        await message.react('👍');
-        await message.react('👎');
+        await message.react("👍");
+        await message.react("👎");
     }
 }
