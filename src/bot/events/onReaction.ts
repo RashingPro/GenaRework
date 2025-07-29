@@ -4,7 +4,7 @@ import config from "config.json";
 @Discord()
 export abstract class OnReaction {
     @On({ event: "messageReactionAdd" })
-    async onReactionAdd([reaction, user, details]: ArgsOf<"messageReactionAdd">, client: Client) {
+    async onReactionAdd([reaction]: ArgsOf<"messageReactionAdd">) {
         const configChannels = config.channels.roles as Record<string, Record<string, Record<string, string>>>;
         if (!Object.keys(configChannels).includes(reaction.message.channel.id)) return;
         const configMessages = configChannels[reaction.message.channel.id];

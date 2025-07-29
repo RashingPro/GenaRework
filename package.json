@@ -9,7 +9,7 @@
     "run": "node ./dist/index.js",
     "prod": "npm run build && npm run run",
     "prettier": "prettier . --write",
-    "lint": "eslint"
+    "lint": "eslint src"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",

@@ -62,7 +62,7 @@ export default abstract class Logger {
         return `[33m[${day}.${month}.${year} ${hours}:${minutes}:${seconds} (${milliseconds}ms)] ${logLevelPrefix}[0m`;
     }
 
-    private static async _log(logLevel: LogLevel, file: string, ...data: any[]) {
+    private static async _log(logLevel: LogLevel, file: string, ...data: unknown[]) {
         this.init();
 
         let text = "";
@@ -84,11 +84,15 @@ export default abstract class Logger {
                 }
             }
             try {
-                if (typeof obj == "object") {
-                    const json = JSON.stringify(obj);
-                    if (json == "{}" && Object.keys(obj).length > 0) toBeLogged += obj.toString();
-                    else toBeLogged += json;
-                } else toBeLogged += obj.toString();
+                if (obj === null) toBeLogged += "[31mnull";
+                else if (obj === undefined) toBeLogged += "[31mundefined";
+                else {
+                    if (typeof obj == "object") {
+                        const json = JSON.stringify(obj);
+                        if (json == "{}" && Object.keys(obj).length > 0) toBeLogged += obj.toString();
+                        else toBeLogged += json;
+                    } else toBeLogged += obj.toString();
+                }
             } catch (err) {
                 console.error("Failed to log object:", obj);
                 console.error(err);
@@ -134,19 +138,19 @@ export default abstract class Logger {
         }
     }
 
-    static async debug(...data: any[]) {
+    static async debug(...data: unknown[]) {
         await this._log(LogLevel.DEBUG, "./latest.log", ...data);
     }
 
-    static async log(...data: any[]) {
+    static async log(...data: unknown[]) {
         await this._log(LogLevel.INFO, "./latest.log", ...data);
     }
 
-    static async warn(...data: any[]) {
+    static async warn(...data: unknown[]) {
         await this._log(LogLevel.WARNING, "./latest.log", ...data);
     }
 
-    static async error(...data: any[]) {
+    static async error(...data: unknown[]) {
         await this._log(LogLevel.ERROR, "./latest.log", ...data);
     }
 }

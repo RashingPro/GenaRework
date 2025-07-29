@@ -10,10 +10,10 @@ export abstract class OnMessage {
     async onMessage([message]: ArgsOf<"messageCreate">, client: Client) {
         assert(client.user);
         if (message.author.id == client.user.id) return;
-        await this.handlePostChannels(message, client);
+        await this.handlePostChannels(message);
     }
 
-    async handlePostChannels(message: Message, client: Client) {
+    async handlePostChannels(message: Message) {
         if (!config.channels.posts.includes(message.channel.id)) return;
         if (message.channel.isDMBased()) return;
         if (!message.member) return;
