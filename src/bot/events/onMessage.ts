@@ -1,8 +1,8 @@
-import { ArgsOf, Client, Discord, On } from "discordx";
-import type { Message } from "discord.js";
 import config from "@/../config.json";
-import assert from "node:assert";
 import Logger from "@/logger";
+import type { Message } from "discord.js";
+import { ArgsOf, Client, Discord, On } from "discordx";
+import assert from "node:assert";
 
 @Discord()
 export abstract class OnMessage {

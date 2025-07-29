@@ -1,6 +1,6 @@
-import { Client } from "discordx";
 import { importx } from "@discordx/importer";
 import { IntentsBitField, Partials } from "discord.js";
+import { Client } from "discordx";
 
 export default class Bot {
     constructor() {

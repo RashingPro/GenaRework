@@ -1,6 +1,6 @@
-import dotenv from "dotenv";
 import Bot from "@/bot";
 import Logger from "@/logger";
+import dotenv from "dotenv";
 
 dotenv.config();
 

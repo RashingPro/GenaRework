@@ -1,6 +1,6 @@
-import { ArgsOf, Discord, On } from "discordx";
 import config from "@/../config.json";
 import Logger from "@/logger";
+import { ArgsOf, Discord, On } from "discordx";
 
 @Discord()
 export abstract class MemberLeave {

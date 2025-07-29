@@ -1,5 +1,5 @@
-import { ArgsOf, Client, Discord, On } from "discordx";
 import config from "config.json";
+import { ArgsOf, Client, Discord, On } from "discordx";
 
 @Discord()
 export abstract class OnReaction {
