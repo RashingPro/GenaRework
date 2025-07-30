@@ -1,5 +1,6 @@
 import Logger from "@/logger";
 import { importx } from "@discordx/importer";
+import config from "config.json";
 import { IntentsBitField, Partials } from "discord.js";
 import { Client } from "discordx";
 
@@ -19,7 +20,22 @@ export default class Bot {
 
         this.client.once("ready", async () => {
             await this.client.initApplicationCommands();
-            console.log("✅ Bot is ready!");
+            await this.logger.log(`${config.emojis.tick} Bot is running`);
+            await this.logger.log(`${config.emojis.blue_triangle_right} Waiting for WebSocket connection...`);
+            await new Promise(resolve => {
+                const check = () => {
+                    if (this.client.ws.ping > 0) {
+                        if (interval) clearInterval(interval);
+                        resolve(null);
+                    }
+                };
+                check();
+                const interval = setInterval(check, 1000);
+            });
+            await this.logger.log(
+                `${config.emojis.tick} WebSocket connection established with ping ${this.client.ws.ping}ms`
+            );
+            this.isReady = true;
         });
 
         this.client.on("interactionCreate", async interaction => {
@@ -28,6 +44,14 @@ export default class Bot {
     }
 
     public readonly client;
+    private _isReady: boolean = false; // isn't in use now, for later use
+
+    public get isReady() {
+        return this._isReady;
+    }
+    private set isReady(value: boolean) {
+        this._isReady = value;
+    }
 
     async start(token: string) {
         await importx(`${__dirname}/bot/commands/**/*.{js,ts}`);
