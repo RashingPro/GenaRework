@@ -10,27 +10,23 @@ export class OnReaction {
     constructor(@inject(Logger) private readonly logger: Logger) {}
 
     @On({ event: "messageReactionAdd" })
-    async onReactionAdd([reaction]: ArgsOf<"messageReactionAdd">) {
+    async onReactionAdd([reaction, user]: ArgsOf<"messageReactionAdd">) {
         const roleId = await this.handleReaction(reaction);
         if (!roleId) return;
-        await reaction.message.fetch();
-        if (!reaction.message.member) return;
-        await this.logger.log(
-            `Reaction-role ${roleId} added by ${reaction.message.member.displayName} (${reaction.message.member.id})`
-        );
-        await reaction.message.member.roles.add(roleId);
+        const member = await reaction.message.guild?.members.fetch(user.id);
+        if (!member) return;
+        await this.logger.log(`Reaction-role ${roleId} added by ${member.displayName} (${member.id})`);
+        await member.roles.add(roleId);
     }
 
     @On({ event: "messageReactionRemove" })
-    async onReactionRemove([reaction]: ArgsOf<"messageReactionRemove">) {
+    async onReactionRemove([reaction, user]: ArgsOf<"messageReactionRemove">) {
         const roleId = await this.handleReaction(reaction);
         if (!roleId) return;
-        await reaction.message.fetch();
-        if (!reaction.message.member) return;
-        await this.logger.log(
-            `Reaction-role ${roleId} removed by ${reaction.message.member.displayName} (${reaction.message.member.id})`
-        );
-        await reaction.message.member.roles.remove(roleId);
+        const member = await reaction.message.guild?.members.fetch(user.id);
+        if (!member) return;
+        await this.logger.log(`Reaction-role ${roleId} removed by ${member.displayName} (${member.id})`);
+        await member.roles.remove(roleId);
     }
 
     private async handleReaction(reaction: MessageReaction | PartialMessageReaction) {
