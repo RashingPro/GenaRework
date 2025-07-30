@@ -1,6 +1,6 @@
 import config from "config.json";
 import { CommandInteraction } from "discord.js";
-import { ArgsOf, GuardFunction } from "discordx";
+import { GuardFunction } from "discordx";
 
 export function IsOnGuild(guildId: string) {
     const guard: GuardFunction<CommandInteraction> = async (interaction, client, next) => {
