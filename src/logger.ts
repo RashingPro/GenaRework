@@ -11,7 +11,7 @@ export enum LogLevel {
 
 @singleton()
 export default class Logger {
-    constructor(logFile: string = "./latest.log") {
+    constructor(public logFile: string = "./latest.log") {
         if (!logFile.endsWith(".log")) throw new Error("Invalid log file path");
         if (fs.existsSync(logFile)) {
             const stat = fs.statSync(logFile);
@@ -69,7 +69,7 @@ export default class Logger {
         return typeof obj === "string" ? obj : util.inspect(obj, { depth: null, colors: true });
     }
 
-    private async _log(logLevel: LogLevel, file: string, ...data: unknown[]) {
+    private async _log(logLevel: LogLevel, ...data: unknown[]) {
         let text = "";
         for (const obj of data) {
             let toBeLogged = this.objectToString(obj);
@@ -104,7 +104,7 @@ export default class Logger {
         logFunc(text);
         try {
             await new Promise(resolve =>
-                fs.appendFile(file, text + "\n", () => {
+                fs.appendFile(this.logFile, text + "\n", () => {
                     resolve(null);
                 })
             );
@@ -115,18 +115,18 @@ export default class Logger {
     }
 
     async debug(...data: unknown[]) {
-        await this._log(LogLevel.DEBUG, "./latest.log", ...data);
+        await this._log(LogLevel.DEBUG, ...data);
     }
 
     async log(...data: unknown[]) {
-        await this._log(LogLevel.INFO, "./latest.log", ...data);
+        await this._log(LogLevel.INFO, ...data);
     }
 
     async warn(...data: unknown[]) {
-        await this._log(LogLevel.WARNING, "./latest.log", ...data);
+        await this._log(LogLevel.WARNING, ...data);
     }
 
     async error(...data: unknown[]) {
-        await this._log(LogLevel.ERROR, "./latest.log", ...data);
+        await this._log(LogLevel.ERROR, ...data);
     }
 }
