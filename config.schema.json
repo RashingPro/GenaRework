@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Gena Rework Config",
+  "type": "object",
+  "properties": {
+    "messages": {
+      "description": "Configures some of the messages content",
+      "type": "object",
+      "properties": {
+        "leave": {
+          "description": "Messages when user leaves server. Bot will chose random one. `{0}` will be replaced with user's mention",
+          "type": "array",
+          "items": { "type": "string", "pattern": ".*\\{0}.*" }
+        },
+        "join": {
+          "description": "Messages when user joins server. Bot will chose random one. `{0}` will be replaced with user's mention",
+          "type": "array",
+          "items": { "type": "string", "pattern": ".*\\{0}.*" }
+        }
+      }
+    },
+    "channels": {
+      "description": "Configures channels",
+      "type": "object",
+      "properties": {
+        "posts": {
+          "type": "array",
+          "description": "Array of channels' IDs where bot should apply posts system",
+          "items": { "type": "string", "pattern": "^\\d*$" }
+        },
+        "roles": {
+          "type": "object",
+          "description": "Reaction-roles system",
+          "propertyNames": {
+            "pattern": "^\\d*$"
+          },
+          "patternProperties": {
+            ".*": {
+              "description": "Specify channel ID",
+              "type": "object",
+              "propertyNames": {
+                "pattern": "^\\d*$"
+              },
+              "patternProperties": {
+                ".*": {
+                  "description": "Specify message ID",
+                  "type": "object",
+                  "propertyNames": {
+                    "anyOf": [
+                      {
+                        "pattern": "<:\\S*:\\d*>"
+                      }
+                    ]
+                  },
+                  "patternProperties": {
+                    ".*": {
+                      "description": "Key = emoji, value = role ID",
+                      "type": "string",
+                      "pattern": "^\\d*$"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "emojis": {
+      "description": "Emojis to put in bot's messages",
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "string"
+        }
+      }
+    },
+    "guilds": {
+      "description": "Allowed guilds for bot",
+      "type": "array",
+      "items": { "type": "string", "pattern": "^\\d*$" }
+    }
+  },
+  "required": ["messages", "channels", "emojis", "guilds"]
+}
