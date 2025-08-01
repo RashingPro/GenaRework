@@ -6,7 +6,7 @@ import { inject, injectable } from "tsyringe";
 
 @Discord()
 @injectable()
-export class OnReaction {
+export class ReactionRoles {
     constructor(@inject(Logger) private readonly logger: Logger) {}
 
     @On({ event: "messageReactionAdd" })

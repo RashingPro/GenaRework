@@ -7,7 +7,7 @@ import { inject, injectable } from "tsyringe";
 
 @Discord()
 @injectable()
-export class OnMessage {
+export class PostChannels {
     constructor(@inject(Logger) private readonly logger: Logger) {}
 
     @On({ event: "messageCreate" })
