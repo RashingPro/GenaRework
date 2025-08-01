@@ -19,6 +19,8 @@ cd ./GenaRework
 TOKEN=bot_token
 ```
 
+### Configure `config.json` Please use `config.schema.json`
+
 ### Build and run
 
 ```shell
