@@ -1,6 +1,6 @@
+import * as path from "node:path";
 import * as fs from "node:fs";
-import * as util from "node:util";
-import { singleton } from "tsyringe";
+import util from "node:util";
 
 export enum LogLevel {
     DEBUG,
@@ -9,22 +9,29 @@ export enum LogLevel {
     ERROR
 }
 
-@singleton()
 export default class Logger {
-    constructor(public logFile: string = "./latest.log") {
-        if (!logFile.endsWith(".log")) throw new Error("Invalid log file path");
-        if (fs.existsSync(logFile)) {
-            const stat = fs.statSync(logFile);
-            if (!stat.isFile()) throw new Error("Invalid log file path");
-        }
+    constructor(public readonly logFile: string = "./latest.log") {
         try {
-            fs.appendFileSync(logFile, "");
-            fs.truncateSync(logFile, 0);
-        } catch (err) {
-            console.error(err);
-            throw new Error("Invalid log file path");
+            const dir = path.dirname(logFile);
+            fs.mkdirSync(dir, { recursive: true });
+
+            fs.appendFileSync(logFile, ""); // create a file
+
+            const stat = fs.statSync(logFile);
+            if (!stat.isFile()) throw new Error();
+
+            fs.truncateSync(logFile, 0); // clear file
+
+            this.logStream = fs.createWriteStream(logFile);
+            this.logStream.on("error", () => {
+                throw new Error("Failed to write log file");
+            });
+        } catch {
+            throw new Error(`Invalid log file: ${logFile}. Please check path and permissions`);
         }
     }
+
+    private readonly logStream;
 
     private getLogPrefix(logLevel: LogLevel) {
         const date = new Date();
@@ -104,7 +111,7 @@ export default class Logger {
         logFunc(text);
         try {
             await new Promise(resolve =>
-                fs.appendFile(this.logFile, text + "\n", () => {
+                this.logStream.write(text + "\n", () => {
                     resolve(null);
                 })
             );
