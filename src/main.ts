@@ -8,7 +8,7 @@ import { container } from "tsyringe";
 dotenv.config();
 
 async function main() {
-    const logger = new Logger();
+    const logger = new Logger("./runtime/latest.log");
     container.register(Logger, { useValue: logger });
     DIService.engine = tsyringeDependencyRegistryEngine.setInjector(container);
 
