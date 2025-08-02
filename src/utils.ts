@@ -5,7 +5,7 @@ export interface FilePreparingResult {
     wasCreated: boolean;
 }
 
-export function prepareFile(file: string) {
+export function prepareFile(file: string, options?: { clear: boolean }) {
     const dir = path.dirname(file);
     fs.mkdirSync(dir, { recursive: true });
 
@@ -22,6 +22,6 @@ export function prepareFile(file: string) {
     const stat = fs.statSync(file);
     if (!stat.isFile()) throw new Error();
 
-    fs.truncateSync(file, 0); // clear file
+    if (!!options?.clear) fs.truncateSync(file, 0); // clear file
     return { wasCreated: wasCreated };
 }
