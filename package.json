@@ -17,6 +17,7 @@
     "eslint": "^9.32.0",
     "globals": "^16.3.0",
     "prettier": "^3.6.2",
+    "prettier-plugin-unused-imports-configurable": "^1.15.0",
     "tsup": "^8.5.0",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
