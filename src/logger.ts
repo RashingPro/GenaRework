@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
-import * as path from "node:path";
 import util from "node:util";
+import { prepareFile } from "@/utils";
 
 export enum LogLevel {
     DEBUG,
@@ -12,23 +12,16 @@ export enum LogLevel {
 export default class Logger {
     constructor(public readonly logFile: string = "./latest.log") {
         try {
-            const dir = path.dirname(logFile);
-            fs.mkdirSync(dir, { recursive: true });
-
-            fs.appendFileSync(logFile, ""); // create a file
-
-            const stat = fs.statSync(logFile);
-            if (!stat.isFile()) throw new Error();
-
-            fs.truncateSync(logFile, 0); // clear file
-
-            this.logStream = fs.createWriteStream(logFile);
-            this.logStream.on("error", () => {
-                throw new Error("Failed to write log file");
-            });
-        } catch {
-            throw new Error(`Invalid log file: ${logFile}. Please check path and permissions`);
+            prepareFile(logFile);
+        } catch (err) {
+            throw new Error(
+                `Error initializing log file ${logFile}: ${util.inspect(err, { depth: null, colors: true })}`
+            );
         }
+        this.logStream = fs.createWriteStream(logFile);
+        this.logStream.on("error", err => {
+            throw new Error(`Error writing log file ${logFile}: ${util.inspect(err, { depth: null, colors: true })}`);
+        });
     }
 
     private readonly logStream;
