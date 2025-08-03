@@ -5,10 +5,10 @@ import { inject, injectable } from "tsyringe";
 @Discord()
 @injectable()
 export class Error {
-    constructor(@inject(Logger) private readonly logger: Logger) {}
+    public constructor(@inject(Logger) private readonly logger: Logger) {}
 
     @On({ event: "error" })
-    async onError([error]: ArgsOf<"error">) {
+    public async onError([error]: ArgsOf<"error">) {
         await this.logger.error("Caught runtime error:", error);
     }
 }

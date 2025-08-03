@@ -10,7 +10,7 @@ export enum LogLevel {
 }
 
 export default class Logger {
-    constructor(public readonly logFile: string = "./latest.log") {
+    public constructor(public readonly logFile: string = "./latest.log") {
         try {
             prepareFile(logFile);
         } catch (err) {
@@ -114,19 +114,19 @@ export default class Logger {
         }
     }
 
-    async debug(...data: unknown[]) {
+    public async debug(...data: unknown[]) {
         await this._log(LogLevel.DEBUG, ...data);
     }
 
-    async log(...data: unknown[]) {
+    public async log(...data: unknown[]) {
         await this._log(LogLevel.INFO, ...data);
     }
 
-    async warn(...data: unknown[]) {
+    public async warn(...data: unknown[]) {
         await this._log(LogLevel.WARNING, ...data);
     }
 
-    async error(...data: unknown[]) {
+    public async error(...data: unknown[]) {
         await this._log(LogLevel.ERROR, ...data);
     }
 }

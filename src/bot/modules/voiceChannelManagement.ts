@@ -101,7 +101,7 @@ export class VoiceChannelManagement {
         await this.handleChannelCreation(oldState, newState);
     }
 
-    public async handleChannelCreation(_oldState: VoiceState, newState: VoiceState) {
+    private async handleChannelCreation(_oldState: VoiceState, newState: VoiceState) {
         const channel = newState.channel;
         if (!channel || channel.id !== config.voice_channels_management.create_channel) return;
         const category = channel.parent;
@@ -157,7 +157,7 @@ export class VoiceChannelManagement {
         }
     }
 
-    public async handleSettingsChange(
+    private async handleSettingsChange(
         interaction: ButtonInteraction | ModalSubmitInteraction,
         newSettingsFn: (oldSettings: ManagementVoiceChannel) => ManagementVoiceChannel
     ) {

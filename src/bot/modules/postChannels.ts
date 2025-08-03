@@ -8,16 +8,16 @@ import { inject, injectable } from "tsyringe";
 @Discord()
 @injectable()
 export class PostChannels {
-    constructor(@inject(Logger) private readonly logger: Logger) {}
+    public constructor(@inject(Logger) private readonly logger: Logger) {}
 
     @On({ event: "messageCreate" })
-    async onMessage([message]: ArgsOf<"messageCreate">, client: Client) {
+    public async onMessage([message]: ArgsOf<"messageCreate">, client: Client) {
         assert(client.user);
         if (message.author.id == client.user.id) return;
         await this.handlePostChannels(message);
     }
 
-    async handlePostChannels(message: Message) {
+    private async handlePostChannels(message: Message) {
         if (!config.channels.posts.includes(message.channel.id)) return;
         if (message.channel.isDMBased()) return;
         if (!message.member) return;

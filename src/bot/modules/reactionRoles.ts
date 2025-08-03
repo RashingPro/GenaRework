@@ -7,10 +7,10 @@ import { inject, injectable } from "tsyringe";
 @Discord()
 @injectable()
 export class ReactionRoles {
-    constructor(@inject(Logger) private readonly logger: Logger) {}
+    public constructor(@inject(Logger) private readonly logger: Logger) {}
 
     @On({ event: "messageReactionAdd" })
-    async onReactionAdd([reaction, user]: ArgsOf<"messageReactionAdd">) {
+    public async onReactionAdd([reaction, user]: ArgsOf<"messageReactionAdd">) {
         const roleId = await this.handleReaction(reaction);
         if (!roleId) return;
         const member = await reaction.message.guild?.members.fetch(user.id);
@@ -20,7 +20,7 @@ export class ReactionRoles {
     }
 
     @On({ event: "messageReactionRemove" })
-    async onReactionRemove([reaction, user]: ArgsOf<"messageReactionRemove">) {
+    public async onReactionRemove([reaction, user]: ArgsOf<"messageReactionRemove">) {
         const roleId = await this.handleReaction(reaction);
         if (!roleId) return;
         const member = await reaction.message.guild?.members.fetch(user.id);

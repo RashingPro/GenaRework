@@ -10,5 +10,16 @@ export default defineConfig([
         extends: ["js/recommended"],
         languageOptions: { globals: globals.node }
     },
-    tseslint.configs.recommended
+    tseslint.configs.recommended,
+    {
+        rules: {
+            "@typescript-eslint/explicit-member-accessibility": [
+                "error",
+                {
+                    accessibility: "explicit"
+                }
+            ],
+            "@typescript-eslint/no-namespace": "off"
+        }
+    }
 ]);

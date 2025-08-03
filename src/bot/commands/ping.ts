@@ -7,7 +7,7 @@ import { Client, Discord, Guard, Slash } from "discordx";
 export class Ping {
     @Slash({ name: "ping", description: "Some cool text goes here" })
     @Guard(IsOnAllowedGuild)
-    async ping(interaction: CommandInteraction, client: Client) {
+    public async ping(interaction: CommandInteraction, client: Client) {
         let websocketPing: string | number = Math.round(client.ws.ping);
         const interactionPing = Date.now() - interaction.createdTimestamp;
 

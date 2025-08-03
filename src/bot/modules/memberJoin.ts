@@ -6,10 +6,10 @@ import { inject, injectable } from "tsyringe";
 @Discord()
 @injectable()
 export class MemberJoin {
-    constructor(@inject(Logger) private readonly logger: Logger) {}
+    public constructor(@inject(Logger) private readonly logger: Logger) {}
 
     @On({ event: "guildMemberAdd" })
-    async onMemberAdd([member]: ArgsOf<"guildMemberAdd">) {
+    public async onMemberAdd([member]: ArgsOf<"guildMemberAdd">) {
         await this.logger.log(`Member ${member.displayName} (${member.id}) joined`);
 
         const channel = member.guild.systemChannel;

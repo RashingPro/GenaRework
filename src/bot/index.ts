@@ -7,7 +7,7 @@ import { VoiceChannelsSettingsStorage } from "@/types";
 import { container } from "tsyringe";
 
 export default class Bot {
-    constructor(public readonly logger: Logger) {
+    public constructor(public readonly logger: Logger) {
         this.client = new Client({
             intents: [
                 IntentsBitField.Flags.Guilds,
@@ -60,7 +60,7 @@ export default class Bot {
         this._isReady = value;
     }
 
-    async start(token: string) {
+    public async start(token: string) {
         await importx(`${__dirname}/bot/commands/**/*.{js,ts}`);
         await importx(`${__dirname}/bot/modules/**/*.{js,ts}`);
         await this.client.login(token);

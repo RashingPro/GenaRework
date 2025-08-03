@@ -1,9 +1,9 @@
 import path from "node:path";
 import fs from "node:fs";
 
-export interface FilePreparingResult {
+export type FilePreparingResult = {
     wasCreated: boolean;
-}
+};
 
 export function prepareFile(file: string, options?: { clear: boolean }) {
     const dir = path.dirname(file);
@@ -22,6 +22,6 @@ export function prepareFile(file: string, options?: { clear: boolean }) {
     const stat = fs.statSync(file);
     if (!stat.isFile()) throw new Error();
 
-    if (!!options?.clear) fs.truncateSync(file, 0); // clear file
+    if (options?.clear) fs.truncateSync(file, 0); // clear file
     return { wasCreated: wasCreated };
 }

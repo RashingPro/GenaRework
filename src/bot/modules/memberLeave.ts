@@ -6,10 +6,10 @@ import { inject, injectable } from "tsyringe";
 @Discord()
 @injectable()
 export class MemberLeave {
-    constructor(@inject(Logger) private readonly logger: Logger) {}
+    public constructor(@inject(Logger) private readonly logger: Logger) {}
 
     @On({ event: "guildMemberRemove" })
-    async onMemberRemove([member]: ArgsOf<"guildMemberRemove">) {
+    public async onMemberRemove([member]: ArgsOf<"guildMemberRemove">) {
         await this.logger.log(`Member ${member.displayName} (${member.id}) left`);
 
         const channel = member.guild.systemChannel;
