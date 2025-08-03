@@ -79,6 +79,50 @@
       "description": "Allowed guilds for bot",
       "type": "array",
       "items": { "type": "string", "pattern": "^\\d*$" }
+    },
+    "voice_channels_management": {
+      "description": "Configures voice channels management module",
+      "type": "object",
+      "properties": {
+        "create_channel": {
+          "description": "Specify channel ID user should join to create voice channel",
+          "type": "string",
+          "pattern": "^\\d*$"
+        },
+        "settings": {
+          "type": "object",
+          "properties": {
+            "privacy": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "public": {
+                  "type": "string"
+                },
+                "private": {
+                  "type": "string"
+                }
+              }
+            },
+            "visibility": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "public": {
+                  "type": "string"
+                },
+                "private": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "required": ["messages", "channels", "emojis", "guilds"]

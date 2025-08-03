@@ -3,9 +3,11 @@ import { importx } from "@discordx/importer";
 import config from "config.json";
 import { IntentsBitField, Partials } from "discord.js";
 import { Client } from "discordx";
+import { VoiceChannelsSettingsStorage } from "@/types";
+import { container } from "tsyringe";
 
 export default class Bot {
-    constructor(public logger: Logger) {
+    constructor(public readonly logger: Logger) {
         this.client = new Client({
             intents: [
                 IntentsBitField.Flags.Guilds,
@@ -18,6 +20,9 @@ export default class Bot {
             partials: [Partials.Message, Partials.Channel, Partials.Reaction, Partials.User, Partials.GuildMember],
             silent: false
         });
+
+        this.voiceChannelsSettingsStorage = new VoiceChannelsSettingsStorage();
+        container.register(VoiceChannelsSettingsStorage, { useValue: this.voiceChannelsSettingsStorage });
 
         this.client.once("ready", async () => {
             await this.client.initApplicationCommands();
@@ -45,6 +50,7 @@ export default class Bot {
     }
 
     public readonly client;
+    public readonly voiceChannelsSettingsStorage: VoiceChannelsSettingsStorage;
     private _isReady: boolean = false; // isn't in use now, for later use
 
     public get isReady() {
