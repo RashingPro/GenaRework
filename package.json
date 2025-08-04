@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "build": "tsup",
-    "run": "node ./dist/index.js",
-    "prod": "npm run build && npm run run",
+    "start": "node ./dist/index.js",
+    "prod": "npm run build && npm run start",
     "prettier": "prettier . --write",
     "lint": "eslint src --fix"
   },
