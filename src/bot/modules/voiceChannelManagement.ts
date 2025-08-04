@@ -99,6 +99,7 @@ export class VoiceChannelManagement {
     @On({ event: "voiceStateUpdate" })
     public async onVoiceStateUpdate([oldState, newState]: ArgsOf<"voiceStateUpdate">) {
         await this.handleChannelCreation(oldState, newState);
+        await this.handleChannelDeletion(oldState, newState);
     }
 
     private async handleChannelCreation(_oldState: VoiceState, newState: VoiceState) {
@@ -155,6 +156,17 @@ export class VoiceChannelManagement {
                 err
             );
         }
+    }
+
+    private async handleChannelDeletion(oldState: VoiceState, newState: VoiceState) {
+        if (!(oldState.channel && !newState.channel)) return;
+        if (oldState.channelId == config.voice_channels_management.create_channel) return;
+        if (!oldState.channel.parent?.children.resolve(config.voice_channels_management.create_channel)) return;
+        if (oldState.channel.members.size != 0) return;
+        await this.logger.log(
+            `Deleting ${oldState.member?.displayName}'s (${oldState.member?.id}) channel ${oldState.channel.id}`
+        );
+        await oldState.channel.delete();
     }
 
     private async handleSettingsChange(
