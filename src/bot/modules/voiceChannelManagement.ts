@@ -6,9 +6,12 @@ import {
     ButtonInteraction,
     ButtonStyle,
     ChannelType,
+    CommandInteraction,
+    ApplicationCommandOptionType,
     MessageActionRowComponentBuilder,
     MessageFlags,
     ModalBuilder,
+    GuildMember,
     ModalSubmitInteraction,
     PermissionOverwriteOptions,
     TextInputBuilder,
@@ -16,7 +19,7 @@ import {
     VoiceBasedChannel,
     VoiceState
 } from "discord.js";
-import { ArgsOf, ButtonComponent, Discord, ModalComponent, On } from "discordx";
+import { ArgsOf, ButtonComponent, Discord, ModalComponent, On, Slash, SlashOption } from "discordx";
 import { inject, injectable } from "tsyringe";
 import { ManagementVoiceChannel, Privacy, VoiceChannelsSettingsStorage } from "@/types";
 
@@ -246,5 +249,41 @@ export class VoiceChannelManagement {
         });
     }
 
-    // @Slash({name: "invite", description: "Пригласить человека в ваш голосовой канал"})
+    @Slash({ name: "invite", description: "Пригласить человека в ваш голосовой канал" })
+    public async inviteHandler(
+        @SlashOption({ name: "user", description: "user", type: ApplicationCommandOptionType.User })
+        targetUser: GuildMember,
+        interaction: CommandInteraction
+    ) {
+        if (!interaction.guild) return;
+        const channelOptions = this.voiceChannelsSettingsStorage.getChannelByOwnerId(interaction.user.id);
+        if (!channelOptions) {
+            await interaction.reply({ content: "У вас нет голосового канала!", flags: MessageFlags.Ephemeral });
+            return;
+        }
+
+        const channel = interaction.guild.channels.resolve(channelOptions.channelId);
+        if (!channel || !channel.isVoiceBased()) {
+            await this.logger.warn(`User ${interaction.user.id} tried to invite ${targetUser.displayName} (${targetUser.id}) to channel`, channel,`\nChannel options:`, channelOptions)
+            await interaction.reply({ content: "Произошла ошибка! Попробуйте еще раз", flags: MessageFlags.Ephemeral });
+            return;
+        }
+
+        if (channelOptions.allowedMembers.includes(targetUser.id)) {
+            await interaction.reply({
+                content: "Этот пользователь уже добавлен в ваш канал!",
+                flags: MessageFlags.Ephemeral
+            });
+        }
+
+        const newOptions = { ...channelOptions, allowedMembers: [...channelOptions.allowedMembers, targetUser.id] };
+        this.voiceChannelsSettingsStorage.editChannel(channelOptions.channelId, {
+            allowedMembers: [...channelOptions.allowedMembers, targetUser.id]
+        });
+        await Utils.applyOptionsToChannel(channel, newOptions);
+        await interaction.reply({
+            content: `Пользователь <@${targetUser.id}> добавлен в ваш канал!`,
+            flags: MessageFlags.Ephemeral
+        });
+    }
 }
