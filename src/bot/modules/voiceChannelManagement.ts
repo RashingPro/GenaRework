@@ -251,7 +251,7 @@ export class VoiceChannelManagement {
 
     @Slash({ name: "invite", description: "Пригласить человека в ваш голосовой канал" })
     public async inviteHandler(
-        @SlashOption({ name: "user", description: "user", type: ApplicationCommandOptionType.User })
+        @SlashOption({ name: "user", description: "user", type: ApplicationCommandOptionType.User, required: true })
         targetUser: GuildMember,
         interaction: CommandInteraction
     ) {
