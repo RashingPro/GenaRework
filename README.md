@@ -33,7 +33,7 @@ npm run prod
 - [x] Reaction-roles
 - [x] Messages when user joins or leaves
 - [x] (beta) Voice channels management
-- [ ] Nick colors (`/color`)
+- [x] Nick colors (`/color`)
 - [ ] Anime shit (`/waifu`)
 - [ ] Emojis mixing (`/mix`)
 - [ ] Emoji stealing (`/steal_emoji`)
