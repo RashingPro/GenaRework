@@ -37,12 +37,10 @@ export class VoiceChannelsSettingsStorage {
     }
 
     public getChannel(channelId: string) {
-        const channel = this.storage.find(val => val.channelId === channelId);
-        if (!channel) throw new Error("This channel is not exists in storage");
-        return channel;
+        return this.storage.find(val => val.channelId === channelId);
     }
 
-    public getChannels(ownerId: string) {
-        return this.storage.filter(val => val.ownerId === ownerId);
+    public getChannelByOwnerId(ownerId: string) {
+        return this.storage.find(val => val.ownerId === ownerId);
     }
 }

@@ -109,13 +109,7 @@ export class VoiceChannelManagement {
         if (!category) return;
         if (!newState.member) return;
 
-        if (
-            this.voiceChannelsSettingsStorage.getChannels(newState.member.id).length >=
-            config.voice_channels_management.max_channels_per_user
-        ) {
-            await newState.disconnect();
-            return;
-        }
+        if (this.voiceChannelsSettingsStorage.getChannelByOwnerId(newState.member.id)) return;
 
         await this.logger.log(
             `Creating voice channel for user ${newState.member?.displayName} (${newState.member?.id})`
@@ -179,11 +173,9 @@ export class VoiceChannelManagement {
             await interaction.message.delete();
             return;
         }
-        let channelSettings;
-        try {
-            channelSettings = this.voiceChannelsSettingsStorage.getChannel(channel.id);
-        } catch {
-            await interaction.message.delete();
+        const channelSettings = this.voiceChannelsSettingsStorage.getChannel(channel.id);
+        if (!channelSettings) {
+            await interaction.channel.delete();
             return;
         }
 
@@ -253,4 +245,6 @@ export class VoiceChannelManagement {
             return { ...oldSettings, settings: { ...oldSettings.settings, maxUsers: value } };
         });
     }
+
+    // @Slash({name: "invite", description: "Пригласить человека в ваш голосовой канал"})
 }

@@ -76,7 +76,6 @@
   "guilds": ["1296026641859870844"],
   "voice_channels_management": {
     "create_channel": "1400931770102452264",
-    "max_channels_per_user": 2,
     "settings": {
       "privacy": {
         "label": "Доступ",
